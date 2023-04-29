@@ -18,7 +18,7 @@ def download_dataset(dataset):
   PURPOSE: download the dataset
   ARGUMENSTS:
     - dataset: string describing the beir dataset
-  RETURN: documents, queries, qrels of the respective dataset
+  RETURN: documents and queries of the respective dataset
   '''
   data_path = f'{dataset}'
   url = f'https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/{dataset}.zip'
@@ -27,20 +27,16 @@ def download_dataset(dataset):
   print(f'Dataset downloaded here: {data_path}')
   return GenericDataLoader(data_path).load(split="test")
 
-            #light        medium      heavy
-#datasets = ['scifact', 'trec-covid', 'fever'] # final list of datasets
-#datasets = ['scifact', 'nfcorpus'] # debugging dataset (light weight)
 datasets = ['scifact', 'nfcorpus']
 
 datasets_data = {}
 number_k_prime_values = 10
 
 for dataset in datasets:
-  corpus, queries, qrels = download_dataset(dataset)
+  corpus, queries, _ = download_dataset(dataset)
   datasets_data[dataset] = {
       'corpus': corpus,
       'queries': queries,
-      'qrels': qrels
   }
 
 k_prime_values = {dataset: [i for i in range(1, (len(data['corpus']) + 1), (len(data['corpus']) + 1)//number_k_prime_values)] for dataset, data in datasets_data.items()}
